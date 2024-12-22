@@ -38,9 +38,11 @@ func AddIPsToWhitelist(clientSet *kubernetes.Clientset, namespace, ingressName s
 
 	// 添加新的 server-snippet 注解
 	ingress.Annotations["nginx.ingress.kubernetes.io/server-snippet"] = `
-proxy_intercept_errors on;error_page 403 404 = @errorpages;location
-@errorpages { proxy_set_header X-Code $status;  rewrite ^ / break; 
-proxy_pass http://custom-error-page.default.svc.cluster.local;}
+proxy_intercept_errors on;
+error_page 403 = @errorpages;
+location @errorpages {
+  proxy_set_header X-Code $status;
+  proxy_pass http://custom-error-page.default;
 }`
 
 	// 更新 Ingress 对象

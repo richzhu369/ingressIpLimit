@@ -29,6 +29,11 @@ func AddIPsToWhitelist(clientSet *kubernetes.Clientset, namespace, ingressName s
 		return err
 	}
 
+	// 初始化 Annotations 如果它是 nil
+	if ingress.Annotations == nil {
+		ingress.Annotations = make(map[string]string)
+	}
+
 	// 删除现有的白名单
 	ingress.Annotations["nginx.ingress.kubernetes.io/whitelist-source-range"] = ""
 

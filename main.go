@@ -6,7 +6,6 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/flowcontrol"
-	"os"
 	"strings"
 	"time"
 )
@@ -45,14 +44,14 @@ func main() {
 		err := AddIPsToWhitelist(ClientSet, *namespace, *ingressName, ips)
 		if err != nil {
 			fmt.Println("加白错误：" + err.Error())
-			os.Exit(1)
+			SendToLark("加白错误：" + err.Error())
 		}
 
 		// 记录执行结果和时间
 		fmt.Println(*namespace, "中的", *ingressName, "IP白名单：", ips, "添加完成", "时间:", time.Now().In(time.FixedZone("CST", 8*3600)).Format("2006-01-02 15:04:05"))
 	} else {
 		fmt.Println("错误：传入的Namespace不存在：", *namespace)
-		os.Exit(1)
+		SendToLark("错误：商户" + *namespace + "不存在")
 	}
 
 }
